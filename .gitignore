@@ -28,3 +28,4 @@ _ReSharper*/
 *.vssscc
 $tf*/
 DicomViewer.opensdf
+DicomViewer.sdf
