@@ -57,7 +57,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\dcmtk\dcmtk_md_bin\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>wsock32.lib;netapi32.lib;ofstd.lib;oflog.lib;dcmdata.lib;dcmnet.lib;zlib.lib;dcmimgle.lib;dcmimage.lib;ijg8.lib;ijg12.lib;ijg16.lib;dcmjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wsock32.lib;netapi32.lib;ofstd.lib;oflog.lib;dcmdata.lib;dcmnet.lib;zlib.lib;dcmimgle.lib;dcmimage.lib;ijg8.lib;ijg12.lib;ijg16.lib;dcmjpeg.lib;charls.lib;dcmjpls.lib;dcmjasp.lib;dcmjp2k.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>

@@ -39,6 +39,15 @@
 #include<dcmtk\dcmjpeg\djdecode.h>    /* for dcmjpeg decoders */
 #include<dcmtk\dcmjpeg\dipijpeg.h>    /* for dcmimage JPEG plugin */
 #include<dcmtk\dcmimage\diregist.h>
+
+#include<dcmtk\dcmjpls\djlsutil.h>
+#include<dcmtk\dcmjpls\djdecode.h>
+
+#include<dcmtk\dcmjp2k\d2utils.h>
+#include<dcmtk\dcmjp2k\d2decode.h>
+#include<dcmtk\dcmjp2k\d2init.h>
+#include<dcmtk\dcmjp2k\d2rparam.h>
+
 // CDicomViewerDoc
 
 IMPLEMENT_DYNCREATE(CDicomViewerDoc, CDocument)
@@ -207,33 +216,74 @@ IMPLEMENT_DYNCREATE(CDicomViewerDoc, CDocument)
 			//得到数据集
 			DcmDataset *pDataset = pDicomFile.getDataset();
 			//read the patient infos
-			OFString patientName;
+			OFString patientName,transferSyntaxUID;
 			if(pDataset->findAndGetOFString(DCM_PatientName,patientName).good()){
 				std::cout<<"patient name:"<<patientName<<std::endl;
 			} 
-			CFrameWnd * pFrame = (CFrameWnd *)(AfxGetApp()->m_pMainWnd);
-			pFrame->GetActiveDocument();
-
+			pDataset->findAndGetOFString(DCM_TransferSyntaxUID,transferSyntaxUID);
 			pDataset->findAndGetFloat64(DCM_WindowCenter, this->m_dDefaultWindowCenter);
 			pDataset->findAndGetFloat64(DCM_WindowWidth, this->m_dDefaultWindowWidth);
 			this->Reset();
 			E_DecompressionColorSpaceConversion opt_decompCSconversion = EDC_photometricInterpretation;
 			E_UIDCreation opt_uidcreation = EUC_default;
 			E_PlanarConfiguration opt_planarconfig = EPC_default;
-
-			OFBool opt_verbose = OFFalse;
-			DJDecoderRegistration::registerCodecs(
-				opt_decompCSconversion,
-				opt_uidcreation,
-				opt_planarconfig,
-				opt_verbose);
+			
 			//根据传输语法构造 DicomImage 从 fstart 帧开始一共 fcount 帧
 			if(this->m_pDicomImage != 0){
 				delete m_pDicomImage;
 			}
-
 			E_TransferSyntax xfer = pDataset->getOriginalXfer();
-			this->m_pDicomImage = new DicomImage(pDataset, xfer);
+			if (transferSyntaxUID.compare("1.2.840.10008.1.2.4.80")||transferSyntaxUID.compare("1.2.840.10008.1.2.4.81")){
+				// JPEG-LS decode
+				DJLSDecoderRegistration::registerCodecs(EJLSUC_default,EJLSPC_restore,OFFalse);
+				
+				this->m_pDicomImage = new DicomImage(pDataset, xfer);
+
+				DJLSDecoderRegistration::cleanup();
+			}else if(transferSyntaxUID.compare("1.2.840.10008.1.2.4.50")||
+				transferSyntaxUID.compare("1.2.840.10008.1.2.4.50")||
+				transferSyntaxUID.compare("1.2.840.10008.1.2.4.51")||
+				transferSyntaxUID.compare("1.2.840.10008.1.2.4.52")||
+				transferSyntaxUID.compare("1.2.840.10008.1.2.4.53")||
+				transferSyntaxUID.compare("1.2.840.10008.1.2.4.54")||
+				transferSyntaxUID.compare("1.2.840.10008.1.2.4.55")||
+				transferSyntaxUID.compare("1.2.840.10008.1.2.4.56")||
+				transferSyntaxUID.compare("1.2.840.10008.1.2.4.57")||
+				transferSyntaxUID.compare("1.2.840.10008.1.2.4.58")||
+				transferSyntaxUID.compare("1.2.840.10008.1.2.4.59")||
+				transferSyntaxUID.compare("1.2.840.10008.1.2.4.60")||
+				transferSyntaxUID.compare("1.2.840.10008.1.2.4.61")||
+				transferSyntaxUID.compare("1.2.840.10008.1.2.4.62")||
+				transferSyntaxUID.compare("1.2.840.10008.1.2.4.63")||
+				transferSyntaxUID.compare("1.2.840.10008.1.2.4.64")||
+				transferSyntaxUID.compare("1.2.840.10008.1.2.4.65")||
+				transferSyntaxUID.compare("1.2.840.10008.1.2.4.66")||
+				transferSyntaxUID.compare("1.2.840.10008.1.2.4.70")){
+				// JPEG decode
+				DJDecoderRegistration::registerCodecs(EDC_photometricInterpretation,EUC_default,EPC_default,OFFalse);
+				
+				this->m_pDicomImage = new DicomImage(pDataset, xfer);
+
+				DJDecoderRegistration::cleanup();
+			}else if(transferSyntaxUID.compare("1.2.840.10008.1.2.4.90")||
+				transferSyntaxUID.compare("1.2.840.10008.1.2.4.91")||
+				transferSyntaxUID.compare("1.2.840.10008.1.2.4.92")||
+				transferSyntaxUID.compare("1.2.840.10008.1.2.4.93")){
+				//JPEG 2000 decode
+					
+				OFCondition error = D2JPEG2000Library::initialize();
+				D2DecoderRegistration::registerCodecs();
+				
+				this->m_pDicomImage = new DicomImage(pDataset, xfer);
+
+				D2DecoderRegistration::cleanup();
+				D2JPEG2000Library::cleanup();
+			}else{
+				
+				this->m_pDicomImage = new DicomImage(pDataset, xfer);
+			}
+			
+
 			result = true;
 		}
 		return result;
