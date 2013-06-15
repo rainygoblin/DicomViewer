@@ -51,13 +51,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\dcmtk\dcmtk_md_bin\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\dcmtk\dcmtk_md_bin\include;C:\dcmtk\cximage\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\dcmtk\dcmtk_md_bin\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>wsock32.lib;netapi32.lib;ofstd.lib;oflog.lib;dcmdata.lib;dcmnet.lib;zlib.lib;dcmimgle.lib;dcmimage.lib;ijg8.lib;ijg12.lib;ijg16.lib;dcmjpeg.lib;charls.lib;dcmjpls.lib;dcmjasp.lib;dcmjp2k.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\dcmtk\cximage\lib;C:\dcmtk\dcmtk_md_bin\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>wsock32.lib;netapi32.lib;ofstd.lib;oflog.lib;dcmdata.lib;dcmnet.lib;zlib.lib;dcmimgle.lib;dcmimage.lib;ijg8.lib;ijg12.lib;ijg16.lib;dcmjpeg.lib;charls.lib;dcmjpls.lib;dcmjasp.lib;dcmjp2k.lib;jasper.lib;libdcr.lib;png.lib;jpeg.lib;libpsd.lib;tiff.lib;jbig.lib;mng.lib;cximage.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -105,8 +105,10 @@
     <None Include="res\DicomViewerDoc.ico" />
     <None Include="res\filelarge.bmp" />
     <None Include="res\filesmall.bmp" />
+    <None Include="res\ico00001.ico" />
     <None Include="res\info.bmp" />
     <None Include="res\main.bmp" />
+    <None Include="res\properti.ico" />
     <None Include="res\properties.bmp" />
     <None Include="res\properties_hc.bmp" />
     <None Include="res\properties_wnd.ico" />
@@ -119,6 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChildFrm.h" />
+    <ClInclude Include="DicomTagsWnd.h" />
     <ClInclude Include="DicomViewer.h" />
     <ClInclude Include="DicomViewerDoc.h" />
     <ClInclude Include="DicomViewerView.h" />
@@ -130,6 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ChildFrm.cpp" />
+    <ClCompile Include="DicomTagsWnd.cpp" />
     <ClCompile Include="DicomViewer.cpp" />
     <ClCompile Include="DicomViewerDoc.cpp" />
     <ClCompile Include="DicomViewerView.cpp" />

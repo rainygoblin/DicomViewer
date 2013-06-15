@@ -14,6 +14,7 @@
 
 #pragma once
 #include "PropertiesWnd.h"
+#include "DicomTagsWnd.h"
 
 class CMainFrame : public CMDIFrameWndEx
 {
@@ -46,6 +47,7 @@ protected:  // 控件条嵌入成员
 	CMFCRibbonStatusBar  m_wndStatusBar;
 	CPropertiesWnd    m_wndProperties;
 	CMFCCaptionBar    m_wndCaptionBar;
+	CDicomTagsWnd     m_wmdDicomTags;
 
 // 生成的消息映射函数
 protected:

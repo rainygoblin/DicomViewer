@@ -103,7 +103,10 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	m_wndProperties.EnableDocking(CBRS_ALIGN_ANY);
 	DockPane(&m_wndProperties);
-
+	
+	m_wmdDicomTags.EnableDocking(CBRS_ALIGN_ANY);
+	CDockablePane* pTabbedBar = NULL;
+	m_wmdDicomTags.AttachToTabWnd(&m_wndProperties, DM_SHOW, TRUE, &pTabbedBar);    
 
 	// 启用增强的窗口管理对话框
 	EnableWindowsDialog(ID_WINDOW_MANAGER, ID_WINDOW_MANAGER, TRUE);
@@ -140,7 +143,15 @@ BOOL CMainFrame::CreateDockingWindows()
 		TRACE0("未能创建“属性”窗口\n");
 		return FALSE; // 未能创建
 	}
-
+	
+	CString strDicomTagsWnd;
+	bNameValid = strDicomTagsWnd.LoadString(IDS_DICOMTAGS_WND);
+	ASSERT(bNameValid);
+	if (!m_wmdDicomTags.Create(strDicomTagsWnd, this, CRect(0, 0, 600, 200), TRUE, ID_VIEW_PROPERTIESWND, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_RIGHT | CBRS_FLOAT_MULTI))
+	{
+		TRACE0("未能创建“Dicom Tags”窗口\n");
+		return FALSE; // 未能创建
+	}
 	SetDockingWindowIcons(theApp.m_bHiColorIcons);
 	return TRUE;
 }
@@ -150,6 +161,8 @@ void CMainFrame::SetDockingWindowIcons(BOOL bHiColorIcons)
 	HICON hPropertiesBarIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_PROPERTIES_WND_HC : IDI_PROPERTIES_WND), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
 	m_wndProperties.SetIcon(hPropertiesBarIcon, FALSE);
 
+	HICON hDicomTagsBarIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_DICOMTAGS_WND_HC : IDI_DICOMTAGS_WND), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
+	m_wmdDicomTags.SetIcon(hDicomTagsBarIcon, FALSE);
 	UpdateMDITabbedBarsIcons();
 }
 

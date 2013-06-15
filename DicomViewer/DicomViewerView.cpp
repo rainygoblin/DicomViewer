@@ -21,7 +21,7 @@
 
 #include "DicomViewerDoc.h"
 #include "DicomViewerView.h"
-
+#include<ximage.h>
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -88,8 +88,13 @@ IMPLEMENT_DYNCREATE(CDicomViewerView, CView)
 		if (!pDoc)
 			return;
 
-		// TODO: 在此处为本机数据添加绘制代码
-
+	//	// TODO: 在此处为本机数据添加绘制代码
+	//	HDC hdc;
+ //hdc=pDC->m_hDC;
+ //CString filename("c:\\11.jpg");
+ //CxImage cimage;
+ //cimage.Load(filename, CXIMAGE_FORMAT_JPG);
+ //cimage.Draw(hdc,0,0);
 		this->DrawDicomImage(pDC);
 	}
 
